@@ -19,12 +19,14 @@
 
 <script>
   import Contact from '../services/contacts.js'
+  import EventBus from './event-bus';
 
   export default {
     name: 'ContactForm',
     props: {
       legend: String,
       contacts: [],
+      error: String,
       contact: {
         annuaire_nom: {
           type: String,
@@ -44,7 +46,19 @@
         },
       },
       error: String,
-      submit: Function,
+      submit: Function
+    },
+    methods :{
+       addContact: function () {
+        Contact.saving(this.contact).then(response => {
+          alert('Le contact a été enregistré avec succès!')
+          EventBus.$emit('i-got-clicked', this.contact);
+          this.contact = {}
+          this.error = ""
+        }).catch(e => {
+          this.error = e.response.statusText
+        })
+      },
     }
   }
 </script>
@@ -67,5 +81,4 @@
     margin-bottom: 16px;
     resize: vertical;
   }
-
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <ContactForm legend="Ajouter un nouveau contact" :contact="contact" :submit="addContact" />
+    <ContactForm legend="Ajouter un nouveau contact" :contact="contact"  />
 
     <ContactList :contacts="contacts" :deleting="deleteContact" :editing=" editContact" />
   </div>
@@ -8,6 +8,7 @@
 
 <script>
   import Contact from './services/contacts.js'
+  import EventBus from './components/event-bus.js';
 
   import ContactList from './components/ContactList.vue'
   import ContactForm from './components/ContactForm.vue'
@@ -36,25 +37,27 @@
 
     mounted() {
       this.list()
+
+    EventBus.$on('i-got-clicked', function (contact) {
+     list(contact)
+    });
     },
 
     methods: {
-
-      addContact: function () {
-        Contact.saving(this.contact).then(response => {
-          alert('Le contact a été enregistré avec succès!')
-          this.list()
-          this.contact = {}
+       
+       list: function list (contact) {
+        Contact.listing().then(response => {
+          this.contacts = response.data;
           this.error = ""
         }).catch(e => {
           this.error = e.response.statusText
         })
       },
-
+        
       deleteContact: function (contact) {
         if (confirm('Voulez-vous supprimer ce contact?')) {
           Contact.deleting(contact).then(response => {
-            this.list();
+            this.list()
             this.error = "";
           }).catch(e => {
             this.error = e.response.statusText
@@ -66,15 +69,6 @@
         this.contact = contact
         this.list()
       },
-
-      list() {
-        Contact.listing().then(response => {
-          this.contacts = response.data;
-          this.error = ""
-        }).catch(e => {
-          this.error = e.response.statusText
-        })
-      }
     },
   }
 </script>
