@@ -18,18 +18,12 @@
 </template>
 
 <script>
-<<<<<<< HEAD
-=======
   import Contact from '../services/contacts.js'
-  import EventBus from './event-bus';
->>>>>>> a6d0d775958c9869b1eeb9972954c1b348904195
-
   export default {
     name: 'ContactForm',
     props: {
       legend: String,
       contacts: [],
-      error: String,
       contact: {
         annuaire_nom: {
           type: String,
@@ -48,27 +42,8 @@
           required: true
         },
       },
-<<<<<<< HEAD
-      submit: Function
-    },
-    methods :{
-
-=======
       error: String,
-      submit: Function
-    },
-    methods :{
-       addContact: function () {
-        Contact.saving(this.contact).then(response => {
-          alert('Le contact a été enregistré avec succès!')
-          EventBus.$emit('i-got-clicked', this.contact);
-          this.contact = {}
-          this.error = ""
-        }).catch(e => {
-          this.error = e.response.statusText
-        })
-      },
->>>>>>> a6d0d775958c9869b1eeb9972954c1b348904195
+      submit: Function,
     }
   }
 </script>
@@ -79,7 +54,6 @@
     width: 450px;
     padding: 20px 12px 10px 20px;
   }
-
   input {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     width: 100%;
